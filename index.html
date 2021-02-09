@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Delta Music</title>
+
+        <link rel="stylesheet" href="/files?file=index.css">
+        <script>
+            function requestSong()
+            {
+                var song = document.getElementById("songInput").value;
+                fetch('http://localhost:5000/song?song='+song).then(response=>response.json()).then(data=>{
+                    
+                    for(var i=0;i<data['ids'].length;i++)
+                    {
+                        var elem = document.createElement("div");
+                        elem.classList += "listContainer";
+                        var d1 = document.createElement("div");
+                        d1.classList += "listTextContainer";
+
+                        var p1 = document.createElement("p");
+                        p1.innerHTML = data['tracks'][i];
+                        var p2 = document.createElement("p");
+                        p2.innerHTML = data['ids'][i];
+                        
+                        d1.appendChild(p1);
+                        d1.appendChild(p2);
+
+                        var b1 = document.createElement("button");
+                        b1.innerHTML = "Select";
+                        b1.onclick = (function(opt) {
+                            return function() {
+                                requestSimilarSongs(opt);
+                            };
+                        })(data['ids'][i]);
+                        b1.classList += "listButton";
+
+                        elem.appendChild(d1);
+                        elem.appendChild(b1);
+                        document.getElementById("resultContainer").appendChild(elem);
+                    }
+                });
+            }
+
+            function requestSimilarSongs(id)
+            {
+                console.log(id);
+            }
+        </script>
+    </head>
+
+    <body>
+        <div id="container">
+            <div id="inputContainer"><input id="songInput"> <button id="songSubmit" onclick="requestSong()">Submit</button></div>
+            <div id="resultContainer"></div>
+        </div>
+    </body>
+</html>
