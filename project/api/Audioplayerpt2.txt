@@ -1,0 +1,87 @@
+
+    </p>
+    <div id="songs"></div>
+
+    <script>
+      var WIDTH = window.innerWidth * 0.95;
+      var HEIGHT = window.innerHeight * 0.85;
+      var audio = document.getElementById("myAudio");
+      var canvas = document.getElementById("myCanvas");
+      canvas.width = WIDTH;
+      canvas.height = HEIGHT;
+      audio.style.width = WIDTH + "px";
+      document.getElementById("songs").style.width = WIDTH + "px";
+      var canvasCtx = canvas.getContext("2d");
+      var playing = false;
+      var lonly = false;
+      var usePow = false;
+      var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 4096;
+      var bufferLength = analyser.frequencyBinCount;
+      var dataArray = new Float32Array(bufferLength);
+
+      audio.onplaying = function() {
+        audioCtx.resume();
+        var source = audioCtx.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.getFloatFrequencyData(dataArray);
+        setInterval(draw, 25);
+        playing = true;
+      };
+
+      function draw() {
+        analyser.getFloatFrequencyData(dataArray);
+        var max = -10000;
+        var iters = bufferLength / 2.25;
+        if (lonly) {
+          iters = bufferLength / 6;
+        }
+        for (var i = 0; i < bufferLength; i++) {
+          //values come out negative. max = 0, min = -891
+          //turn that into pos val between 0 and 1
+          //generally end up between .83 and .96
+          //mult by 9 to increase difference, and subtract 7.9 to bring values back under 1
+          dataArray[i] = (dataArray[i] * 9) / 891 + 1.1;
+          if (usePow) {
+            dataArray[i] = Math.pow(dataArray[i] + 1, 4) / 16;
+          }
+          if (dataArray[i] > max) {
+            max = dataArray[i];
+          }
+        }
+        canvasCtx.fillStyle = "rgb(0, 0, 0)";
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+        var barWidth = (WIDTH / bufferLength) * 1.5;
+        if (lonly) {
+          barWidth = (WIDTH / bufferLength) * 4;
+        }
+        var barHeight;
+        var x = 1;
+        for (var i = 0; i < bufferLength; i++) {
+          var colorMult = (dataArray[i] / max) * 256;
+          canvasCtx.fillStyle = `rgb(${Math.floor(
+            -colorMult + 256
+          )},${Math.floor(colorMult)},256)`;
+          barHeight = dataArray[i] * HEIGHT;
+          canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight + 5);
+          x += barWidth;
+        }
+      }
+
+      function zoomSwitch() {
+        lonly = !lonly;
+      }
+
+      function powSwitch() {
+        usePow = !usePow;
+      }
+
+      audio.onended = function() {
+        playing = false;
+      };
+    </script>
+  </body>
+</html>
+
