@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <title>Audio Visualizer</title>
+    <style>
+      body {
+        background-color: black;
+      }
+      button{
+        border-radius: 5px;
+        background-color: #3B4C7F;
+        color: #7799ff;
+        border: 1px solid gray;
+        padding: 0px 4px;
+        font-size: 1em;
+        font-family: Arial;
+        cursor: pointer;
+      }
+      button:active{
+        background-color: #893E96;
+      }
+      button:hover{
+        border: 1px solid #7799ff;
+      }
+      canvas {
+        left: 2.5%;
+        top: 7.5%;
+        z-index: -1;
+        position: absolute;
+      }
+      #options {
+        position: relative;
+        top: -8px;
+        margin: auto;
+        width: 460px;
+      }
+      audio {
+        margin: auto;
+        display: block;
+      }
+      #currentSong {
+        color: #7799ff;
+        display: block;
+        text-align: center;
+        font-size: 1.1em;
+        font-family: Arial;
+      }
+      #songs {
+        white-space: nowrap;
+        position: absolute;
+        left: 2.5%;
+        bottom: 0px;
+        overflow-x: auto;
+      }
+      footer{
+        color: white;
+        display: inline-block;
+        position: absolute;
+        top:0px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas"></canvas>
+    <div id="options">
+      <button id="low" onclick="zoomSwitch()">
+        Zoom in / out
+      </button>
+      <button id="pow" onclick="powSwitch()">
+        Toggle Power Algorithm
+      </button>
+    </div>
+      
