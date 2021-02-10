@@ -42,7 +42,7 @@ def home():
 
 @app.route('/files', methods=['GET'])
 def getFile():
-    return send_file(request.args['file'])    
+    return send_file(request.args['file'])
 
 @app.route('/song', methods=['GET'])
 def requestSongs():
@@ -65,8 +65,8 @@ def requestSimilarPlaylist():
 @app.route('/v1/test-song-player/')
 def generate_audioplayer_page():
     try:
-        song_list = ["8-bit.wav", "Hunter_Fav.wav", "piano.wav"]
-        song_choice = random.choice(song_list)
+        song_list = ["response.wav", "Hunter_Fav.wav", "piano.wav"]
+        song_choice = "response.wav"#random.choice(song_list)
         path = "audio\\" + song_choice
         print("asking file", path)
         with open("Audioplayerpt1.txt", "r") as first_half, open("Audioplayerpt2.txt", "r") as second_half:
