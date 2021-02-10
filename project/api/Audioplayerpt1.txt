@@ -71,4 +71,4 @@
         Toggle Power Algorithm
       </button>
     </div>
-      
+    

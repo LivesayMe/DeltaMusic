@@ -8,7 +8,7 @@
             {
                 var song = document.getElementById("songInput").value;
                 fetch('http://localhost:5000/song?song='+song).then(response=>response.json()).then(data=>{
-                    
+                    document.getElementById("resultContainer").innerHTML = "";
                     for(var i=0;i<data['ids'].length;i++)
                     {
                         var elem = document.createElement("div");
@@ -42,7 +42,29 @@
 
             function requestSimilarSongs(id)
             {
+                document.getElementById("resultContainer").innerHTML = "<h2>Collecting songs to generate model</h2>";
                 console.log(id);
+                fetch('http://localhost:5000/playlist?song='+id).then(response=>response.json()).then(data=>{
+                    document.getElementById("resultContainer").innerHTML = "";
+                    for(var i=0;i<data['html'].length;i++)
+                    {
+                        document.getElementById("resultContainer").appendChild(createElementFromHTML(data['html'][i]));
+                    }
+                    link = document.createElement("a");
+                    link.href = "http://10.46.13.123:5000/v1/test-song-player/";
+                    link.innerHTML = "Listen To Your Song";
+                    document.getElementById("container").appendChild(link);
+                });
+
+                
+            }
+
+            function createElementFromHTML(htmlString) {
+                var div = document.createElement('div');
+                div.innerHTML = htmlString.trim();
+                div.firstchild.classList += "songTile";
+                // Change this to div.childNodes to support multiple top-level nodes
+                return div.firstChild; 
             }
         </script>
     </head>

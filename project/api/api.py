@@ -29,7 +29,7 @@ def generate_audioplayer_page():
         path = "audio\\" + song_choice
         print("asking file", path)
         with open("Audioplayerpt1.txt", "r") as first_half, open("Audioplayerpt2.txt", "r") as second_half:
-            return (first_half.read() + f'<audio controls id="myAudio" src="http://127.0.0.1:5000/v1/return-file?path={path}"'
+            return (first_half.read() + f'<audio controls id="myAudio" src="http://10.46.13.123:5000/v1/return-file?path={path}"'
             + f' crossorigin="anonymous" autoplay></audio><p id="currentSong">{song_choice}' + second_half.read())
     except Exception as e:
         return str(e)
@@ -50,4 +50,4 @@ def return_files():
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found.</p>", 404
 
-app.run()
+app.run(host='10.46.13.123')
