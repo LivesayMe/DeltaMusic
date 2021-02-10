@@ -1,7 +1,7 @@
 #container
 {
     width: 600px;
-    height: 800px;
+    height: 600px;
     margin-left:auto;
     margin-right: auto;
     background-color: grey;
@@ -47,4 +47,9 @@
     border: 5px solid red;
     margin-bottom: 10px;
     border-radius: 5px;
+}
+
+.songTile
+{
+    margin-bottom: 10px;
 }

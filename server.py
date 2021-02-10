@@ -50,7 +50,14 @@ def requestSongs():
                       if all(word in tracks[track].lower()
                              for word in user_input.lower().split())],
                      key = lambda x: tracks[x])
-    return jsonify({"ids": ids, 'tracks': [tracks[i] for i in ids]})    
+    return jsonify({"ids": ids, 'tracks': [tracks[i] for i in ids]})  
+
+@app.route('/playlist', methods=['GET'])
+def requestSimilarPlaylist():
+    global mp3tovecs, tracktovecs, tracks, track_ids    
+    return jsonify({"html": make_playlist(None, '', None, [mp3tovecs, tracktovecs], \
+                                 [creativity, 1-creativity], [request.args['song']], tracks, track_ids, \
+                                 size=size, lookback=lookback, noise=noise, replace=replace)})
 
 #-----------------------------------------------------------------------------#
 
@@ -143,7 +150,7 @@ def make_playlist(sp, username, playlist_id, mp3tovecs, weights, seed_tracks, \
     playlist = seed_tracks
     playlist_tracks = [tracks[_] for _ in playlist]
     html_playlist = []
-
+    print("Generating playlist")
     for i in range(0, len(seed_tracks)):
         add_track_to_playlist(sp, username, playlist_id, playlist[i], replace and len(playlist) == 1)
         html_playlist.append((f'<iframe src="https://open.spotify.com/embed/track/{playlist[i]}" \
@@ -161,9 +168,9 @@ def make_playlist(sp, username, playlist_id, mp3tovecs, weights, seed_tracks, \
         html_playlist.append((f'<iframe src="https://open.spotify.com/embed/track/{playlist[-1]}" \
                      width="100%" height="80" frameborder="0" allowtransparency="true" \
                      allow="encrypted-media"></iframe>'))
-    for i in html_playlist:
-        print(i)
-    return playlist
+    #for i in html_playlist:
+    #    print(i)
+    return html_playlist
 
 # create a musical journey between given track "waypoints"
 def join_the_dots(sp, username, playlist_id, mp3tovecs, weights, ids, \
