@@ -51,7 +51,7 @@
                         document.getElementById("resultContainer").appendChild(createElementFromHTML(data['html'][i]));
                     }
                     link = document.createElement("a");
-                    link.href = "http://10.46.13.123:5000/v1/test-song-player/";
+                    link.href = "http://localhost:5000/v1/test-song-player/";
                     link.innerHTML = "Listen To Your Song";
                     document.getElementById("container").appendChild(link);
                 });
@@ -62,7 +62,7 @@
             function createElementFromHTML(htmlString) {
                 var div = document.createElement('div');
                 div.innerHTML = htmlString.trim();
-                div.firstchild.classList += "songTile";
+                // div.firstchild.classList += "songTile"; TODO: This wasn't working. div.firstchild undefined?
                 // Change this to div.childNodes to support multiple top-level nodes
                 return div.firstChild; 
             }
